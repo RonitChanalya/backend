@@ -1,0 +1,2 @@
+It is a mordern practice to have both Access as well as Refresh Token.
+    Difference between Access token and refresh token is that Access Token are usually short lived and Refresh Token are long lived.
