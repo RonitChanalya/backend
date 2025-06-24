@@ -4,6 +4,7 @@ dotenv.config({path: './.env'})
 import { app } from "./app.js";
 
 import connectDB from "./db/index.js";
+
 connectDB() // async codes give back promises
 .then(() => {
     app.on("error", (error) => { // Listening for errors if app is not working. Listening for an event "error", and printing the message if any.
@@ -16,5 +17,5 @@ connectDB() // async codes give back promises
     })
 })
 .catch((error) => {
-    console.log("MongoDB connection failed ", error);
+    console.log("❌ MongoDB connection failed ", error);
 })

@@ -46,7 +46,7 @@ const registerUser = asyncHandler( async (req, res) => {
 
     // check if user already exists
     const existedUser = await User.findOne({
-        $or: [{ username }, { email }]
+        $or: [{ username }, { email }] // Here we are checking if any one of either username or email matches in the DB.
     })
 
     if (existedUser) {
@@ -77,11 +77,11 @@ const registerUser = asyncHandler( async (req, res) => {
     // create user object - create entry in db
     const user = await User.create({
         fullName,
-        avatar: avatar.url,
-        coverImage: coverImage?.url || "",
         email,
         password,
         username: username.toLowerCase(),
+        avatar: avatar.url,
+        coverImage: coverImage?.url || "",
     })
 
     // remove password and refresh token field from response to user
