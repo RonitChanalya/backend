@@ -33,6 +33,10 @@ const videoSchema = new Schema({
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'User',
+    },
+    public_id: {
+        type: String, // Cloudinary's public id
+        required: true
     }
 }, { timestamps: true })
 
