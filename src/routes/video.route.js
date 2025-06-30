@@ -24,5 +24,7 @@ router.route('/update-video/:id').post(verifyJWT, upload.fields([
         maxCount: 1
     }
 ]), updateVideo)
+router.route("/delete-video/:id").get(verifyJWT, deleteVideo);
+router.route("toggle-publish-status/:id").get(verifyJWT, togglePublishStatus);
 
 const router = Router();

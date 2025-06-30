@@ -183,11 +183,67 @@ const updateVideo = asyncHandler(async (req, res) => {
         ))
 })
 
+const deleteVideo = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    if(!id) {
+        throw new ApiError(401, "Video Id not found");
+    }
+
+    const video = await Video.findById(id);
+
+    if(!video) {
+        throw new ApiError(404, "Video not found")
+    }
+
+    const refrenceDeletedVideo = await cloudinary.uploader.destroy(
+        video.public_id,
+        { resource_type: "video" }
+    );
+
+    if(refrenceDeletedVideo.result !== "ok") {
+        throw new ApiError(500, "Video not deleted from cloudinary");
+    }
+
+    await Video.findByIdAndDelete(id);
+
+    res.status(200)
+        .json(new ApiResponse(
+            200,
+            {},
+            "Video deleted Successfully"
+        ))
+})
+
+const togglePublishStatus = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    if(!id) {
+        throw new ApiError(401, "Video Id is not provided")
+    }
+
+    const video = await Video.findById(id).select("-public_id -createdAt -updatedAt");
+
+    if(!video) {
+        throw new ApiError(404, "Video not found")
+    }
+
+    video.isPublished = !video.isPublished;
+    await video.save();
+
+    return res.status(200)
+        .json(new ApiResponse(
+            200,
+            video,
+            "Published status toggled successfully"
+        ))
+})
+
 export {
     getAllVideos, 
     publishAVideo,
     getVideoById, 
-    updateVideo, // Current
-    deleteVideo,
-    togglePublishStatus
+    updateVideo, 
+    deleteVideo, 
+    togglePublishStatus // Current
 }
